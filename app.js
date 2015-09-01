@@ -4,10 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var credentials = require('./bin/credential.js');
 
-var routes = require('./routes/index');
+//var routes = require('./routes/index');
 var users = require('./routes/users');
-
+var api = require('./routes/api');
 var app = express();
 
 // view engine setup
@@ -19,11 +20,18 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser(credentials.cookieSecret)); //credentials.cookieSecret
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+console.log('IN APP JS');
+console.log(path.resolve(__dirname,'..', 'angApp/app'));
+app.use(express.static(path.resolve(__dirname,'..', 'angApp/app')));
+
+//app.use('/', routes);
 app.use('/users', users);
+app.use('/api', api);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
