@@ -70,6 +70,12 @@ router.post('/login', function(req, res, next) {
 
     //res.cookie('hola', 'im dora', cookieResp);
     var search = Users.where({name: req.body.name, password: req.body.password});
+
+    //enable to see all User entries
+    /*Users.find(function(err, entry) {
+        console.log(entry);
+    });*/
+
     search.findOne(function (err, entry) {
         if (err) {
             return next(err);

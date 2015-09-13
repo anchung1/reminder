@@ -95,14 +95,46 @@ router.get('/db/:title', function(req, res, next) {
     });
 });
 
+router.get('/db/userData', function(req, res, next) {
 
-router.delete('/db/*', function (req, res, next) {
-    var delItem = path.basename(req.originalUrl);
-    Dora.findOneAndRemove({name: delItem}, function (err) {
+    var id = req.signedCookies._id;
+
+    Users.findOne({_id: id}, 'name', function(err, user) {
+        if (err) return next(err);
+        if (!user) return next();
+
+        Entry.find({'userID':id}, function(err, entryList) {
+            if (err) return next(err);
+            if (!entryList || !entryList.length) return next();
+
+            console.log(entryList);
+            res.json(entryList);
+        })
+    });
+    //res.send('user data');
+});
+
+router.delete('/db/:title', function (req, res, next) {
+    /*Dora.findOneAndRemove({name: delItem}, function (err) {
         if (err) return console.log('unable to delete ' + delItem);
         res.send(delItem);
-    });
+    });*/
 
+
+    var id = req.signedCookies._id;
+    var delItem = req.params.title;
+
+    Users.findOne({_id: id}, 'name', function(err, user) {
+        if (err) return next(err);
+        if (!user) return next();
+
+        Entry.findOneAndRemove({title: delItem}, function(err) {
+            if (err) return next(err);
+            res.send('item ' + delItem + ' removed');
+        });
+
+
+    });
 });
 
 module.exports = router;
