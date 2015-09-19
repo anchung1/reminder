@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 console.log('IN APP JS');
 console.log(path.resolve(__dirname,'..', 'angApp/app'));
-app.use(express.static(path.resolve(__dirname,'..', 'angApp/app')));
+app.use(express.static(path.resolve(__dirname,'..', 'import/app')));
 
 //app.use('/', routes);
 app.use('/users', users);
